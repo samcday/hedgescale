@@ -210,10 +210,11 @@ type LogTailConfig struct {
 }
 
 type CLIConfig struct {
-	Address  string
-	APIKey   string
-	Timeout  time.Duration
-	Insecure bool
+	Address   string
+	APIKey    string
+	Timeout   time.Duration
+	Insecure  bool
+	Plaintext bool
 }
 
 type PolicyConfig struct {
@@ -817,10 +818,11 @@ func LoadCLIConfig() (*Config, error) {
 		DisableUpdateCheck: viper.GetBool("disable_check_updates"),
 		UnixSocket:         viper.GetString("unix_socket"),
 		CLI: CLIConfig{
-			Address:  viper.GetString("cli.address"),
-			APIKey:   viper.GetString("cli.api_key"),
-			Timeout:  viper.GetDuration("cli.timeout"),
-			Insecure: viper.GetBool("cli.insecure"),
+			Address:   viper.GetString("cli.address"),
+			APIKey:    viper.GetString("cli.api_key"),
+			Timeout:   viper.GetDuration("cli.timeout"),
+			Insecure:  viper.GetBool("cli.insecure"),
+			Plaintext: viper.GetBool("cli.plaintext"),
 		},
 		Log: logConfig,
 	}, nil
@@ -979,10 +981,11 @@ func LoadServerConfig() (*Config, error) {
 		Policy: policyConfig(),
 
 		CLI: CLIConfig{
-			Address:  viper.GetString("cli.address"),
-			APIKey:   viper.GetString("cli.api_key"),
-			Timeout:  viper.GetDuration("cli.timeout"),
-			Insecure: viper.GetBool("cli.insecure"),
+			Address:   viper.GetString("cli.address"),
+			APIKey:    viper.GetString("cli.api_key"),
+			Timeout:   viper.GetDuration("cli.timeout"),
+			Insecure:  viper.GetBool("cli.insecure"),
+			Plaintext: viper.GetBool("cli.plaintext"),
 		},
 
 		Log: logConfig,

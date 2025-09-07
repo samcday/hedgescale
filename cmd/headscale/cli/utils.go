@@ -100,20 +100,26 @@ func newHeadscaleCLIWithConfig() (context.Context, v1.HeadscaleServiceClient, *g
 			}),
 		)
 
-		if cfg.CLI.Insecure {
-			tlsConfig := &tls.Config{
-				// turn of gosec as we are intentionally setting
-				// insecure.
-				//nolint:gosec
-				InsecureSkipVerify: true,
-			}
+		if !cfg.CLI.Plaintext {
+			if cfg.CLI.Insecure {
+				tlsConfig := &tls.Config{
+					// turn of gosec as we are intentionally setting
+					// insecure.
+					//nolint:gosec
+					InsecureSkipVerify: true,
+				}
 
-			grpcOptions = append(grpcOptions,
-				grpc.WithTransportCredentials(credentials.NewTLS(tlsConfig)),
-			)
+				grpcOptions = append(grpcOptions,
+					grpc.WithTransportCredentials(credentials.NewTLS(tlsConfig)),
+				)
+			} else {
+				grpcOptions = append(grpcOptions,
+					grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")),
+				)
+			}
 		} else {
 			grpcOptions = append(grpcOptions,
-				grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")),
+				grpc.WithTransportCredentials(insecure.NewCredentials()),
 			)
 		}
 	}
@@ -198,5 +204,5 @@ func (t tokenAuth) GetRequestMetadata(
 }
 
 func (tokenAuth) RequireTransportSecurity() bool {
-	return true
+	return false
 }
