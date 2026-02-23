@@ -187,6 +187,7 @@ nav:
       - DNS: ref/dns.md
       - DERP: ref/derp.md
       - API: ref/api.md
+      - API v2 compatibility: ref/api-v2-compat.md
       - Tags: ref/tags.md
       - Debug: ref/debug.md
       - Integration:

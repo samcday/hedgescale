@@ -33,6 +33,8 @@ headscale apikeys expire --prefix <PREFIX>
 - Headscale Version: `/version`, e.g. `https://headscale.example.com/version`
 - Authenticate using HTTP Bearer authentication by sending the [API key](#api) with the HTTP `Authorization: Bearer <API_KEY>` header.
 
+For Terraform/OpenTofu compatibility work against `/api/v2`, see [API v2 compatibility](api-v2-compat.md).
+
 Start by [creating an API key](#api) and test it with the examples below. Read the API documentation provided by your
 Headscale server at `/swagger` for details.
 
