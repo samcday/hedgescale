@@ -96,6 +96,7 @@ type Headscale struct {
 	state           *state.State
 	noisePrivateKey *key.MachinePrivate
 	ephemeralGC     *db.EphemeralGarbageCollector
+	tsapi           *tsapiState
 
 	DERPServer *derpServer.DERPServer
 
@@ -138,6 +139,7 @@ func NewHeadscale(cfg *types.Config) (*Headscale, error) {
 		noisePrivateKey:   noisePrivateKey,
 		clientStreamsOpen: sync.WaitGroup{},
 		state:             s,
+		tsapi:             newTSAPIState(),
 	}
 
 	// Initialize ephemeral garbage collector
@@ -508,6 +510,16 @@ func (h *Headscale) createRouter(grpcMux *grpcRuntime.ServeMux) *chi.Mux {
 		r.Use(h.httpAuthenticationMiddleware)
 		r.HandleFunc("/v1/*", grpcMux.ServeHTTP)
 	})
+
+	r.Route("/api/v2", func(r chi.Router) {
+		h.registerTSAPIOAuthRoutes(r)
+
+		r.Group(func(r chi.Router) {
+			r.Use(h.tsapiAuthenticationMiddleware)
+			h.registerTSAPIProtectedRoutes(r)
+		})
+	})
+
 	r.Get("/favicon.ico", FaviconHandler)
 	r.Get("/", BlankHandler)
 
