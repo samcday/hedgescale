@@ -1079,6 +1079,10 @@ func readOrCreatePrivateKey(path string) (*key.MachinePrivate, error) {
 // All change should be enqueued here and empty will be automatically
 // ignored.
 func (h *Headscale) Change(cs ...change.Change) {
+	if h.mapBatcher == nil {
+		return
+	}
+
 	h.mapBatcher.AddWork(cs...)
 }
 
